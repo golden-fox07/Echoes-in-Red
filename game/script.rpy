@@ -126,15 +126,19 @@ label talk_sophie:
 #  ENDING 1 -  bad death (by the person)
 label trust_alex:
     scene black
-    show screen centered_narration("YOU DIED!!..THE STRANGER HAS KILLED YOU")
+    show screen death_msg("YOU DIED!!..THE STRANGER HAS KILLED YOU")
     $ renpy.pause()
-    hide screen centered_narration
+    hide screen death_msg
+    scene black with fade
+    jump start
 
 label trust_sophie:
     scene black
-    show screen centered_narration("YOU DIED!!..THE FRIEND HAS KILLED YOU")
+    show screen death_msg("YOU DIED!!..THE FRIEND HAS KILLED YOU")
     $ renpy.pause()
-    hide screen centered_narration
+    hide screen death_msg
+    scene black with fade
+    jump start
 
 label accuse_alex:
     show friend angry at left with dissolve
@@ -150,18 +154,22 @@ label accuse_alex:
     # # 🔊 sudden scream (make sure scream.ogg exists in /game/audio/)
     # play sound "scream.ogg"
 
-    # sudden flash / violent scene change
-    scene bg room_dark with vpunch 
-    with hpunch
-    hide room_dark with Dissolve
+    # # sudden flash / violent scene change
+    # scene bg room_dark with vpunch 
+    # with hpunch
+    # hide room_dark with Dissolve
     "A sharp scream cuts through the room—then silence."
 
     # collapse → fade into black screen
     scene black with fade
-    show screen centered_narration("YOU DIED!!")
+    show screen death_msg("YOU DIED!!")
+    $ renpy.pause()
+    hide screen death_msg
     show screen centered_narration("Alex’s rage consumes everything. Sophie falls first... then you.")
     $ renpy.pause()
     hide screen centered_narration
+    scene black with fade
+    jump start
 
 label accuse_sophie:
     show stranger smile at right with dissolve
@@ -179,20 +187,24 @@ label accuse_sophie:
         # play sound "scream.ogg"
 
     # sudden violent scene change
-    scene bg room_dark with vpunch
-    with hpunch
+    # scene bg room_dark with vpunch
+    # with hpunch
 
     "A chilling scream tears through the room—Alex’s scream."
 
     hide friend angry
-    hide room_dark with Dissolve
+    # hide room_dark with Dissolve
 
     # collapse → fade into black screen
     scene black with fade
-    show screen centered_narration("YOU DIED!!")
+    show screen death_msg("YOU DIED!!")
+    $ renpy.pause()
+    hide screen death_msg
     show screen centered_narration("Sophie strikes Alex down before you can react... then turns on you.")
     $ renpy.pause()
     hide screen centered_narration
+    scene black with fade
+    jump start
 
     
     return
@@ -214,3 +226,19 @@ screen centered_narration(content):
             font "fonts/Typewriter.ttf"
             textalign 0.5
             xalign 0.5
+
+screen death_msg(content):
+    frame:
+        align (0.5, 0.15)
+        background None
+        xpadding 80
+        ypadding 50
+        xmargin 100
+        ymargin 50
+        
+        text content:
+                size 100
+                color "#eb1414"
+                font "fonts/Typewriter.ttf"
+                textalign 0.5
+                xalign 0.5
