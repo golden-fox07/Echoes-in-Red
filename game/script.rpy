@@ -13,12 +13,15 @@ image bg room_dark = "images/room/room-dark.png"
 image bg room_bloody = "images/room/room-bloody.png"
 image hands = "images/misc/hands.png"
 image friend smile = "images/friend/smile-long.png"
+image friend smile_creepy = Transform("images/friend/smile.png", yoffset=-180, zoom=0.9)
 image stranger worried = "images/stranger/worried.png"
 image dead_body = "images/misc/body.png"
 image friend angry = Transform("images/friend/angry.png", yoffset=-180, zoom=0.9)
 image stranger angry = "images/stranger/angry.png"
 image stranger angry_cropped = Transform("images/stranger/angry-cropped.png", yoffset=-180)
 image stranger smile = "images/stranger/smile.png"
+image friend evil = Transform("images/friend/evil.png", yoffset=-180, zoom=0.9)
+image stranger evil = "images/stranger/evil.png"
 
 # music and sounds
 define audio.heartbeat = "audio/heartbeat.mp3"
@@ -159,6 +162,9 @@ label accuse_alex:
     # with hpunch
     # hide room_dark with Dissolve
     "A sharp scream cuts through the room—then silence."
+    show friend evil at left with dissolve
+    pause 0.1 
+    hide friend evil with dissolve
 
     # collapse → fade into black screen
     scene black with fade
@@ -172,16 +178,19 @@ label accuse_alex:
     jump start
 
 label accuse_sophie:
-    show stranger smile at right with dissolve
+    show stranger angry at right with dissolve
     u "Sophie… no, it’s you. You’re the one pulling the strings here."
     s "Me? After everything I’ve revealed to you, this is how you repay me?"
     s "You really think Alex is the danger here?"
-    hide stranger smile
 
-    show friend angry at left with dissolve
+    show friend smile_creepy at left with dissolve
     f "Finally! You see it too. I told you she couldn’t be trusted!"
-
     "The air grows heavy. Sophie’s smile fades into something darker—something monstrous."
+    hide stranger smile
+    "A sharp scream cuts through the room—then silence."
+    show stranger evil at right with dissolve
+    pause 0.1 
+    hide stranger evil with dissolve
 
     # 🔊 sudden scream (optional — add scream.ogg in /game/audio/)
         # play sound "scream.ogg"
