@@ -12,85 +12,170 @@ image bg room_clean = "images/room/room-clean.png"
 image bg room_dark = "images/room/room-dark.png"
 image bg room_bloody = "images/room/room-bloody.png"
 image hands = "images/misc/hands.png"
+image dead_body = "images/misc/body.png"
+# friend
 image friend smile = "images/friend/smile-long.png"
 image friend smile_creepy = Transform("images/friend/smile.png", yoffset=-180, zoom=0.9)
-image stranger worried = "images/stranger/worried.png"
-image dead_body = "images/misc/body.png"
 image friend angry = Transform("images/friend/angry.png", yoffset=-180, zoom=0.9)
+image stranger worried = "images/stranger/worried.png"
+image friend evil = Transform("images/friend/evil.png", yoffset=-180, zoom=0.9)
+# stranger
 image stranger angry = "images/stranger/angry.png"
 image stranger angry_cropped = Transform("images/stranger/angry-cropped.png", yoffset=-180)
 image stranger smile = "images/stranger/smile.png"
-image friend evil = Transform("images/friend/evil.png", yoffset=-180, zoom=0.9)
 image stranger evil = "images/stranger/evil.png"
 
-# music and sounds
+# music and sfx
 define audio.heartbeat = "audio/heartbeat.mp3"
 
 label start:
+    $ loop_count += 1
 
     scene black
     play sound audio.heartbeat
     show screen centered_narration("Thump Thump... Thump Thump...")
     $ renpy.pause()
     stop sound fadeout 5.0
-    hide screen centered_narration
+       
+    if loop_count == 1:
+        hide screen centered_narration
+        " Your eyes snap open ..."
 
-    " Your eyes snap open ..."
+    elif loop_count <= 3:
+        hide screen centered_narration
+        "Your eyes snap open... AGAIN."
+        "why does this feel familiar?"
+
+    else:
+        show screen centered_narration("Loop [loop_count]: The nightmare continues...") 
+        $ renpy.pause(2.0)
+        stop sound fadeout 3.0
+        hide screen centered_narration
+        "You know what comes next..."
+
     scene bg room_clean at Transform(zoom=1.1)
-    u "Huhh....there am i???"
+
+    if loop_count == 1:
+        u "Huhh....there am i???"
+
+    elif loop_count <= 3:
+        u "This room... I've been here before."
+
+    else:
+        u "Not again... PLEASE, NOT AGAIN."
+
     "You push urself upright and freeze."
     show hands at center, Transform(zoom=0.6) with dissolve
-    u "My ha-hands?? They're smeared with blood"
-    "Sticky, half-dried stains, crusted under your nails."
-    u "I don’t remember ho-how—"
-    hide hands with dissolve
+
+    if loop_count ==1:
+        u "My ha-hands?? They're smeared with blood"
+        "Sticky, half-dried stains, crusted under your nails."
+        u "I don’t remember ho-how—"
+
+    else:
+        u "The blood... it's always the blood."
+        "You have seen this before. Felt this ...before."
+
+        if loop_count >= 3:
+            u "BUT WHOSE BLOOD IS IT REALLY??"
     
+    hide hands with dissolve
+
+    # dead body scene
+    show dead_body at center, Transform(zoom=0.5) with dissolve
+    "The corpse lies by the door, silent."
+    "The blood on the floor glistens. Your pulse pounds in your ears."
+
+    if loop_count >= 2:
+        "Wait... something about the body..."
+        "The clothes... they look familiar. Too familiar."
+
+        if loop_count >= 5:
+            "The face is obscured, but the build, the hair..."
+            u "No... it can't be..."
+
+    hide dead_body with dissolve
+        
     # frd introduction
     show friend smile at left with dissolve
     f "HEYY, LOOK AT ME!!"
-    "You blink hard… and nearly jump."
-    u "A-Alex??!"
-    u "What are you doing here? How—"
-    f "Shhhh...Don’t panic. Don’t think about it. Just stay calm, okay? can you do that for me?"
-    "You nod gently."
-    f "Good, You can trust me. Don't worry, I’ll help you get out of this."
+
+    if loop_count == 1:
+        "You blink hard… and nearly jump."
+        u "A-Alex??!"
+        u "What are you doing here? H-how—"
+
+    else: 
+        "Alex again. Always the same entrance."
+        u "Alex... why are you always here when I wake up?"
+        f "What do you mean 'always'? You must be confused from the trauma."
+
+        if loop_count >= 4:
+            "His smile doesn't reach his eyes. It never has."
+    
+    f "Just stay calm, okay? Can you do that for me?"
+    f "You can trust me. I'll help you get out of this."
     f "Forget what you see. Forget what you think you remember."
-    "His voice is steady, warm… almost rehearsed."
-    "For a moment, You want to believe him."
+
+    if loop_count >= 3:
+        "His voice is steady, warm... rehearsed. Too rehearsed."
+        u "You've said that before."
+        f "Said what before? You're not making sense."
+    
     hide friend with dissolve
 
     # strangers introduction
     show stranger worried at right with dissolve
     h "Don’t trust him"
-    "Then—another voice. A women you don’t recognize."
-    u "W-wait… who the hell are you?!"
-    h "Me? …I’m Sophie."
+    if loop_count == 1:
+        "Then—another voice. A women you don’t recognize."
+        u "W-wait… who the hell are you?!"
+        h "Me? …I’m Sophie."
+
+    else:
+        "Sophie. Right on cue."
+        u "Sophie... we meet again."
+        s "Again? What are you talking about?"
+
+        if loop_count >= 4:
+            "But there's a flicker in her eyes. Recognition?"
+
     s "Don’t you dare listen to him!"
-    u "W-who are you??"
-    s "I just told you— Sophie! And if you want to survive, you better listen."
     s "Look at your hands. LOOK at them!"
-    s "You think that blood is his? Or mine? No… it’s YOURS."
+    s "You think that blood is his? Or mine? or yours??"
+
+    if loop_count >= 3:
+        s "The truth is right in front of you, but you keep choosing to forget."
+        u "What truth?"
+        s "Look at the body. Really look."
+
     s "He’s lying to you. He always lies. He’s keeping you here!"
     "Her voice shakes, desperate. But her eyes… there’s truth in them or madness..?"
-    hide stranger with dissolve
 
-    # body
-    show dead_body at center, Transform(zoom=0.5) with dissolve
-    "The corpse lies by the door, silent."
-    "The blood on the floor glistens. Your pulse pounds in your ears."
-    "One of them is lying. Maybe both."
-    hide dead_body with dissolve
+    hide stranger with dissolve
 
     show friend angry at left
     show stranger angry_cropped at right 
-    "You’re still reeling from the shock of seeing both of them in your apartment."
-    "The blood on your hands feels heavier than ever. Your pulse is racing."
+
+    if loop_count >= 4:
+        "The same scene, the same choices. But this time, you notice things."
+        "The way Alex's jaw tightens when Sophie mentions the body."
+        "The way Sophie's hands shake - not from fear, but from frustration."
+        "They both know more than they're saying."
+    
     menu:
-        "Alone...who will you choose to talk to first????"
-        "Talk to Alex":
+        "Who will you choose to trust this time?"
+        "Talk to Alex" if alex_trusted_count < 3:
+            $ alex_trusted_count += 1
             jump talk_alex
-        "Talk to Sophie":
+        "Talk to Sophie" if sophie_trusted_count < 3:
+            $ sophie_trusted_count += 1
             jump talk_sophie
+        "Examine the body once more" if loop_count >= 3:
+            jump examine_body
+        "Confront them both about the loops" if loop_count >= 5:
+            jump confront_loops
+        
 
 # --- Branch: Talk to Alex first ---
 label talk_alex:
