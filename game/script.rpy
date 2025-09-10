@@ -35,6 +35,10 @@ image stranger worried = "images/stranger/worried.png"
 define audio.heartbeat = "audio/heartbeat.mp3"
 
 label start:
+    show screen disclaimer
+    $ renpy.pause(hard=True)
+    hide screen disclaimer
+
     $ loop_count += 1
 # intro 
     scene black
@@ -640,7 +644,73 @@ screen death_msg(content):
         
         text content:
                 size 100
-                color "#eb1414"
+                color "#c40000"
                 font "fonts/Typewriter.ttf"
                 textalign 0.5
                 xalign 0.5
+
+# Disclaimer
+screen disclaimer():
+    tag menu
+    frame:
+        background "#000000e6"
+        xalign 0.5
+        yalign 0.5
+        padding (50, 50)
+        vbox:
+            spacing 28
+            xalign 0.5
+            text " DISCLAIMER " style "disclaimer_title"
+            text "This visual novel contains mature themes including\nviolence, psychological distress, and challenging\nrelationship dynamics." style "disclaimer_text"
+            text "It may not be suitable if you are sensitive to\nblood, disturbing conversations, or intense subject matter." style "disclaimer_text"
+            text "If you need support, please visit 🌍 findahelpline.com" style "disclaimer_help"
+            text "By continuing, you acknowledge that you are prepared\nfor a story with unsettling and potentially triggering content." style "disclaimer_text"
+            text "Remember: This is a fictional work. Your well-being,\nhowever, is very real and important." style "disclaimer_note"
+            hbox:
+                spacing 80
+                xalign 0.5
+                textbutton "▶ CONTINUE" action Return(True) style "disclaimer_button"
+                textbutton "❌ EXIT" action Quit(confirm=False) style "disclaimer_button"
+
+style disclaimer_title is text:
+    size 45
+    color "#aa001c"
+    bold True
+    font "fonts/Typewriter.ttf"
+    xalign 0.5
+    text_align 0.5
+
+style disclaimer_text is text:
+    size 20
+    color "#e0e0e0"
+    font "fonts/Typewriter.ttf"
+    text_align 0.5
+    xalign 0.5
+
+style disclaimer_help is text:
+    size 20
+    color "#00dffc"
+    font "fonts/Typewriter.ttf"
+    bold True
+    text_align 0.5
+    xalign 0.5
+
+style disclaimer_note is text:
+    size 18
+    color "#bbbbbb"
+    font "fonts/Typewriter.ttf"
+    italic True
+    text_align 0.5
+    xalign 0.5
+
+style disclaimer_button is button:
+    hover_background "#971400"
+    padding (18, 12)
+    xalign 0.5
+
+style disclaimer_button_text is text:
+    size 22
+    color "#ffffff"
+    font "fonts/Typewriter.ttf"
+    xalign 0.5
+    text_align 0.5
