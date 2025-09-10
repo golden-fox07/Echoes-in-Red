@@ -16,6 +16,7 @@ image bg room_clean = "images/room/room-clean.png"
 image bg room_dark = "images/room/room-dark.png"
 image bg room_bloody = "images/room/room-bloody.png"
 image hands = "images/misc/hands.png"
+image heaven = "images/misc/heaven.png"
 image dead_body = "images/misc/body.png"
 # friend
 image friend smile = "images/friend/smile-long.png"
@@ -52,7 +53,7 @@ label start:
         "why does this feel familiar?"
 
     else:
-        show screen centered_narration("Loop [loop_count]: The nightmare continues...") 
+        show screen centered_narration("Loop [loop_count]: The nightmare continues.......") 
         $ renpy.pause(2.0)
         stop sound fadeout 3.0
         hide screen centered_narration
@@ -188,7 +189,7 @@ label examine_body:
     hide friend angry
     hide stranger angry_cropped
     "You ignore both of them and walk toward the corpse."
-    show dead_body at center, Transform(zoom=0.6) with dissolve
+    show dead_body at center, Transform(zoom=0.7) with dissolve
 
     u "I need to see..."
     f "Don't! You don't want to see that!"
@@ -200,7 +201,7 @@ label examine_body:
     "Your hands tremble as you reach toward the body's face."
 
     menu:
-        "Turn the body's face toward you?"
+        "DO YOU WANNA KNOW THE TRUTH??"
         "Yes, I need to know":
             jump reveal_truth
         "No, I can't do this":
@@ -211,12 +212,14 @@ label reveal_truth:
     $ memory_fragments += 3
 
     "You turn the face..."
-    scene black with vpunch
+    scene black
     "Its your own face. pale, lifeless.... but unmistakable yours."
 
     scene bg room_bloody with dissolve
     u "I'm... I'm dead?"
+    show stranger worried at right with dissolve
     s "Finally. You're beginning to understand."
+    show friend worried at left with dissolve
     f "No! Don't listen to her! It's not real!"
     "The room shifts around you. The clean walls now show blood spatters."
     "Everything you thought you knew crumbles."
@@ -225,14 +228,16 @@ label reveal_truth:
     f "She's lying! I would never hurt you!"
     u "Then explain the body! Explain why I keep waking up here!"
     "Alex's facade finally cracks."
-
-    show friend evil at left with dissolve
     f "Because... because I can't let you go."
-    f "I didn't mean to kill you. It was an accident!"
+    show friend evil at left with dissolve
+    pause(0.1)
+    hide friend evil
+    show friend worried at left with dissolve
+    f "but I didn't mean to kill you. It was an accident!"
     f "But if you remember, if you accept it... you'll leave me."
+    hide friend worried
+    show stranger smile at center with dissolve
     "Sophie steps forward, her form becoming more translucent."
-
-    show stranger smile at right with dissolve
     s "I'm not really Sophie. I'm part of you, the part that wants to remember, to move on."
     s "Alex's guilt is keeping you here, but only you can choose to break free."
 
@@ -291,13 +296,12 @@ label question_alex:
 
 label alex_confession:
     scene bg room_dark with dissolve
-    show friend evil at left with dissolve
+    show friend angry at left with dissolve
 
     f "You... you really want to know?"
     f "We had a fight. A terrible fight about you wanting to leave."
     f "I got angry.. angrier than I had ever been."
     f "And I... God, I pushed you. You hit your head on the corner of the table."
-    "Tears stream down his face."
     f "You died instantly. And I've been trying to bring you back ever since."
     f "This place... it's not real. It's my guilt, my desperation, keeping your spirit trapped."
     u "Alex..."
@@ -306,15 +310,17 @@ label alex_confession:
     jump choose_fate
 
 label true_ending:
-    scene white with dissolve
-    u "Alex.... I forgive you."
+    scene black
     "The room begins to dissolve around you."
+    scene heaven at Transform(zoom=1.1)
+    show friend worried at center with dissolve
+    u "Alex.... I forgive you."
     f "NO! Dont't leave me!"
     u "You have to let me go... and you have to forgive yourself"
     "The light grows brighter"
     s "You are free now. Both of you"
 
-    scene white
+    scene black
     show screen centered_narration("You have broken the cycle. Alex will have to face reality, but your spirit is finally at peace.")
     $ renpy.pause()
     hide screen centered_narration
@@ -322,11 +328,11 @@ label true_ending:
     return
 
 label sacrifice_ending:
-    scene bg room_clean with dissolve
+    scene bg room_clean at Transform(zoom=1.1) with dissolve
     u "I...I can't leave you like this, Alex"
+    show friend smile_creepy at center 
     f "You will stay??"
     u "I will stay"
-    "Sophie fades away, disappoined"
     s "then the loop continues......"
     scene black with fade
     show screen centered_narration("You have chosen to remain trapped. The cycle begins anew, as it has countless times before.")
@@ -382,6 +388,31 @@ label trust_sophie:
         hide screen death_msg
         jump start
 
+label accuse_sophie:
+    show stranger smile at right with dissolve
+    u "Sophie... I think you're the one manipulating me."
+    show stranger worried at right with dissolve
+    s "What? I'm trying to help you find the truth!"
+    u "Or you're trying to drive me insane."
+    show friend smile at left with dissolve
+    f "Finally! You see it too! She can't be trusted."
+    s "You're making a terrible mistake... He's the one who killed you!"
+    u "I don't know who to believe anymore!"
+    s "Fine. If you won't listen to words... stay trapped forever!"
+    show friend evil at left
+    f "Yes! Choose me! Forget her lies!"
+    scene black with hpunch
+    
+    show screen death_msg("DENIAL FEEDS THE NIGHTMARE")
+    $ renpy.pause(2.0)
+    hide screen death_msg
+    
+    show screen centered_narration("The cycle begins again...")
+    $ renpy.pause(2.0)
+    hide screen centered_narration
+    jump start
+   
+
 label sophie_revelation:
     show stranger smile at center with dissolve
     s "You've trusted me enough times now. You're ready for the truth."
@@ -417,8 +448,11 @@ label accuse_alex:
     if memory_fragments >= 2:
         show screen centered_narration("Alex's rage consumes everything... but this time, you remember more.")
         $ renpy.pause()
-        hide scrren centered_narration
-        "Fragments of memory pierce through the darkness..."
+        hide screen centered_narration
+        show screen centered_narration("Fragments of memory pierce through the darkness..")
+        $ renpy.pause()
+        hide screen centered_narration
+        scene black
         jump memory_breakthrough
     else:
         scene black
@@ -429,7 +463,6 @@ label accuse_alex:
 
 label memory_breakthrough:
     scene bg room_bloody with dissolve
-    show dead_body_close at center
     "In the moment before the loop resets, you see it clearly."
     "Your own body. Your own blood."
     "The truth Alex has been hiding."
@@ -494,10 +527,12 @@ label justice_ending:
     u "Alex, you have to face what you've done."
     u "Keeping me here won't change the past."
     
-    scene white with dissolve
+    scene heaven at Transform(zoom=1.1) with dissolve
+    show friend worried at center
     f "I... I know. I'm sorry. I'm so sorry."
-    
+    pause(2.0)
     "The room fades as Alex finally accepts his guilt."
+    scene black with fade
     show screen centered_narration("Alex will turn himself in. Your spirit is free, and justice will be served.")
     $ renpy.pause()
     hide screen centered_narration
