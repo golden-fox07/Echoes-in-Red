@@ -36,7 +36,7 @@ define audio.heartbeat = "audio/heartbeat.mp3"
 
 label start:
     $ loop_count += 1
-# intro part 1
+# intro 
     scene black
     play sound audio.heartbeat
     show screen centered_narration("Thump Thump... Thump Thump...")
@@ -87,7 +87,7 @@ label start:
     
     hide hands with dissolve
 
-    # dead body scene
+    # dead body intro
     show dead_body at center, Transform(zoom=0.5) with dissolve
     "The corpse lies by the door, silent."
     "The blood on the floor glistens. Your pulse pounds in your ears."
@@ -130,7 +130,7 @@ label start:
     
     hide friend with dissolve
 
-    # strangers introduction
+    # stranger introduction
     show stranger worried at right with dissolve
     h "Don’t trust him"
     if loop_count == 1:
@@ -168,7 +168,7 @@ label start:
         "The way Alex's jaw tightens when Sophie mentions the body."
         "The way Sophie's hands shake - not from fear, but from frustration."
         "They both know more than they're saying."
-# intro part 1 ends
+# intro ends
 
     menu:
         "Who will you choose to trust this time?"
@@ -183,8 +183,53 @@ label start:
         "Confront them both about the loops" if loop_count >= 5:
             jump confront_loops
     
+# Branch - Talk to Alex
+label talk_alex:
+    hide stranger angry
+    show friend smile at left with fade
+    
+    if alex_trusted_count == 1:
+        f "Thank you for trusting me."
+        u "I want to understand what's happening."
+        f "Someone is manipulating this situation. Someone wants you to panic."
+    elif alex_trusted_count == 2:
+        f "You came to me again. Good."
+        u "Alex... why do I feel like we've had this conversation before?"
+        f "You're just confused. The trauma is affecting your memory."
+        "But his smile wavers for just a moment."
+    else:
+        f "Always choosing me. That's... that's good."
+        u "Alex, I'm starting to remember things. Things about us."
+        f "Don't. Please don't try to remember."
+        "There's desperation in his voice now."
 
-# --- Branch: examine body 
+    menu:
+        "How do you respond?"
+        "Trust him completely":
+            jump trust_alex
+        "Question him further":
+            jump question_alex
+        "Accuse him":
+            jump accuse_alex
+
+# Branch - Talk to Sophie 
+label talk_sophie:
+    hide friend angry
+    show stranger smile at right with fade
+    s "Thanks for chosing me but listen to me carefully"
+    u "See, I don’t really trust you. Who the hell even are you?"
+    s "who i am isnt important ... for now, we need to get out of here before we get killed!!"
+    s "Everything you see, everything you remember… it’s not what it seems."
+    "You stare at her, trying to decide if she’s telling the truth… or trying to trick you."
+
+    menu:
+        "What do you think of Sophie?"
+        "Trust her":
+            jump trust_sophie
+        "Accuse her":
+            jump accuse_sophie
+
+# Branch - Examine dead body 
 label examine_body:
     hide friend angry
     hide stranger angry_cropped
@@ -206,6 +251,53 @@ label examine_body:
             jump reveal_truth
         "No, I can't do this":
             jump deny_truth
+
+# Branch - Confront about loops
+label confront_loops:
+    u "Enoughh! I know whats happening HERE"
+    u "This is loop number [loop_count]. I have died here [loop_count] times!!"
+    u "One of you is keeping me trapped!"
+
+    show friend angry at left
+    show stranger worried at right 
+
+    show friend worried at left
+    show stranger worried at right
+    
+    f "You're not making sense..."
+    s "He's finally remembering..."
+    
+    u "The body by the door - it's mine, isn't it?"
+    
+    "Both of them freeze."
+    jump choose_confrontation
+
+# do u need truth
+label deny_truth:
+    "You jerk your hand back, scrambling away from the body."
+    hide dead_body with dissolve
+    u "No... NO! This isn't real!"
+    u "I'm alive! I'm standing right here!"
+    
+    show friend worried at left with dissolve
+    f "That's right! Don't let her tricks fool you!"
+    
+    show stranger angry at right with dissolve
+    s "You coward!!! You're choosing ignorance over truth!!!"
+    s "How many more times will you run from reality??!?!!"
+    
+    u "I don't care what either of you say! I'm getting out of here!"
+    "You run toward the door, but it slams shut before you reach it."
+    scene black 
+    
+    show screen death_msg("DENIAL ONLY MAKES THE PRISON STRONGER")
+    $ renpy.pause(2.0)
+    hide screen death_msg
+    
+    show screen centered_narration("The harder you fight the truth, the tighter the chains become...")
+    $ renpy.pause(2.0)
+    hide screen centered_narration
+    jump start
 
 label reveal_truth:
     $ discovered_truth = True
@@ -249,35 +341,56 @@ label reveal_truth:
             jump sacrifice_ending
         "Reject this reality":
             jump denial_ending
-        
-# Branch: Talk to Alex
-label talk_alex:
-    hide stranger angry
-    show friend smile at left with fade
-    
-    if alex_trusted_count == 1:
-        f "Thank you for trusting me."
-        u "I want to understand what's happening."
-        f "Someone is manipulating this situation. Someone wants you to panic."
-    elif alex_trusted_count == 2:
-        f "You came to me again. Good."
-        u "Alex... why do I feel like we've had this conversation before?"
-        f "You're just confused. The trauma is affecting your memory."
-        "But his smile wavers for just a moment."
-    else:
-        f "Always choosing me. That's... that's good."
-        u "Alex, I'm starting to remember things. Things about us."
-        f "Don't. Please don't try to remember."
-        "There's desperation in his voice now."
 
-    menu:
-        "How do you respond?"
-        "Trust him completely":
-            jump trust_alex
-        "Question him further":
-            jump question_alex
-        "Accuse him":
-            jump accuse_alex
+# alex branches  
+label trust_alex:
+    if alex_trusted_count >= 3:
+        jump alex_breakdown
+    else:
+        scene black
+        show screen death_msg("SOPHIE'S FRUSTRATION TEARS THROUGH REALITY")
+        $ renpy.pause()
+        hide screen death_msg
+        jump start
+
+label accuse_alex:
+    show friend angry at left with dissolve
+    u "Alex... I think you're the one who's been lying."
+    
+    if loop_count >= 4:
+        u "Every loop, you try to make me forget...WHY??"
+        f "Loop?? What are you talking about??"
+        u " You know exactly what I am talking about"
+
+    f "After everything I've done for you, you accuse me?!"
+    f "Fine. Believe her lies if you want!"
+
+    $ memory_fragments += 1
+    hide friend angry
+    show stranger smile at right with dissolve
+    s "Finally. You are starting to see"
+    "A sharp scream cuts through the room then....silence"
+
+    show friend evil at left with dissolve
+    pause(0.1)
+    hide friend evilwith dissolve
+
+    scene black with fade
+    if memory_fragments >= 2:
+        show screen centered_narration("Alex's rage consumes everything... but this time, you remember more.")
+        $ renpy.pause()
+        hide screen centered_narration
+        show screen centered_narration("Fragments of memory pierce through the darkness..")
+        $ renpy.pause()
+        hide screen centered_narration
+        scene black
+        jump memory_breakthrough
+    else:
+        scene black
+        show screen death_msg("YOU DIED!")
+        $ renpy.pause()
+        hide screen death_msg
+        jump start
 
 label question_alex:
     u "Alex, I need you to be honest with me. What really happened here?"
@@ -294,6 +407,49 @@ label question_alex:
         "You're scaring me, Alex.":
             jump alex_breakdown
 
+label alex_breakdown:
+    show friend worried at center with dissolve
+    f "I... I can't keep doing this."
+    f "You want the truth? Fine. FINEE!!"
+    scene bg room_dark with dissolve
+
+    show friend angry at center
+    f "I fought that night. You said you were leaving me."
+    f "You said you couldn't love someone so possessive, so controlling."
+    f "And I... I lost it. I grabbed you. Shook you."
+
+    show friend worried at center
+    f "You tried to pull away and I pushed you. So hard."
+    f "Your head... it hit the corner of that table."
+    f "There was so much blood..."
+    u "Alex..."
+
+    show friend angry at center
+    f "But I found a way! I found a way to bring you back!"
+    f "Every time you remember, every time you try to leave, I reset it all!"
+    f "I won't let you abandon me again!"
+    show friend evil at center with dissolve
+    f "And I'll keep doing it! Forever if I have to!"
+    f "You belong to me! In life, in death, FOREVER!"
+    show stranger angry at right
+    s "His obsession is consuming everything! Even your death isn't enough for him!"
+    u "Alex, this isn't love... this is madness!"
+
+    scene black 
+    show screen death_msg("OBSESSION DEVOURS ALL")
+    $ renpy.pause()
+    hide screen death_msg
+
+    show screen centered_narration("Alex's possessive rage tears through reality itself...")
+    $ renpy.pause(2.0)
+    hide screen centered_narration
+
+    show screen centered_narration("The cycle feeds on his inability to let go...")
+    $ renpy.pause(2.0)
+    hide screen centered_narration
+
+    jump start    
+
 label alex_confession:
     scene bg room_dark with dissolve
     show friend angry at left with dissolve
@@ -309,6 +465,51 @@ label alex_confession:
 
     jump choose_fate
 
+# sophie branches
+label trust_sophie:
+    if sophie_trusted_count >= 3:
+        jump sophie_revelation
+    else:
+        scene black
+        show screen death_msg("ALEX'S DESPERATION RESETS EVERYTHING")
+        $ renpy.pause()
+        hide screen death_msg
+        jump start
+
+label accuse_sophie:
+    show stranger smile at right with dissolve
+    u "Sophie... I think you're the one manipulating me."
+    show stranger worried at right with dissolve
+    s "What? I'm trying to help you find the truth!"
+    u "Or you're trying to drive me insane."
+    show friend smile at left with dissolve
+    f "Finally! You see it too! She can't be trusted."
+    s "You're making a terrible mistake... He's the one who killed you!"
+    u "I don't know who to believe anymore!"
+    s "Fine. If you won't listen to words... stay trapped forever!"
+    show friend evil at left
+    f "Yes! Choose me! Forget her lies!"
+    scene black with hpunch
+    
+    show screen death_msg("DENIAL FEEDS THE NIGHTMARE")
+    $ renpy.pause(2.0)
+    hide screen death_msg
+    
+    show screen centered_narration("The cycle begins again...")
+    $ renpy.pause(2.0)
+    hide screen centered_narration
+    jump start
+   
+label sophie_revelation:
+    show stranger smile at center with dissolve
+    s "You've trusted me enough times now. You're ready for the truth."
+    s "I am you. The part of you that refuses to be trapped."
+    s "Alex's love has become a prison. His guilt keeps you here."
+    s "But you have the power to break free."
+
+    jump examine_body
+
+# ENDINGS
 label true_ending:
     scene black
     "The room begins to dissolve around you."
@@ -351,115 +552,21 @@ label denial_ending:
     scene black with fade
     jump start
 
-# --- Branch: Talk to Sophie first --
-label talk_sophie:
-    hide friend angry
-    show stranger smile at right with fade
-    s "Thanks for chosing me but listen to me carefully"
-    u "See, I don’t really trust you. Who the hell even are you?"
-    s "who i am isnt important ... for now, we need to get out of here before we get killed!!"
-    s "Everything you see, everything you remember… it’s not what it seems."
-    "You stare at her, trying to decide if she’s telling the truth… or trying to trick you."
-
-    menu:
-        "What do you think of Sophie?"
-        "Trust her":
-            jump trust_sophie
-        "Accuse her":
-            jump accuse_sophie
-
-label trust_alex:
-    if alex_trusted_count >= 3:
-        jump alex_breakdown
-    else:
-        scene black
-        show screen death_msg("SOPHIE'S FRUSTRATION TEARS THROUGH REALITY")
-        $ renpy.pause()
-        hide screen death_msg
-        jump start
-
-label trust_sophie:
-    if sophie_trusted_count >= 3:
-        jump sophie_revelation
-    else:
-        scene black
-        show screen death_msg("ALEX'S DESPERATION RESETS EVERYTHING")
-        $ renpy.pause()
-        hide screen death_msg
-        jump start
-
-label accuse_sophie:
-    show stranger smile at right with dissolve
-    u "Sophie... I think you're the one manipulating me."
-    show stranger worried at right with dissolve
-    s "What? I'm trying to help you find the truth!"
-    u "Or you're trying to drive me insane."
-    show friend smile at left with dissolve
-    f "Finally! You see it too! She can't be trusted."
-    s "You're making a terrible mistake... He's the one who killed you!"
-    u "I don't know who to believe anymore!"
-    s "Fine. If you won't listen to words... stay trapped forever!"
-    show friend evil at left
-    f "Yes! Choose me! Forget her lies!"
-    scene black with hpunch
+label justice_ending:
+    u "Alex, you have to face what you've done."
+    u "Keeping me here won't change the past."
     
-    show screen death_msg("DENIAL FEEDS THE NIGHTMARE")
-    $ renpy.pause(2.0)
-    hide screen death_msg
-    
-    show screen centered_narration("The cycle begins again...")
-    $ renpy.pause(2.0)
-    hide screen centered_narration
-    jump start
-   
-
-label sophie_revelation:
-    show stranger smile at center with dissolve
-    s "You've trusted me enough times now. You're ready for the truth."
-    s "I am you. The part of you that refuses to be trapped."
-    s "Alex's love has become a prison. His guilt keeps you here."
-    s "But you have the power to break free."
-
-    jump examine_body
-
-label accuse_alex:
-    show friend angry at left with dissolve
-    u "Alex... I think you're the one who's been lying."
-    
-    if loop_count >= 4:
-        u "Every loop, you try to make me forget...WHY??"
-        f "Loop?? What are you talking about??"
-        u " You know exactly what I am talking about"
-
-    f "After everything I've done for you, you accuse me?!"
-    f "Fine. Believe her lies if you want!"
-
-    $ memory_fragments += 1
-    hide friend angry
-    show stranger smile at right with dissolve
-    s "Finally. You are starting to see"
-    "A sharp scream cuts through the room then....silence"
-
-    show friend evil at left with dissolve
-    pause(0.1)
-    hide friend evilwith dissolve
-
+    scene heaven at Transform(zoom=1.1) with dissolve
+    show friend worried at center
+    f "I... I know. I'm sorry. I'm so sorry."
+    pause(2.0)
+    "The room fades as Alex finally accepts his guilt."
     scene black with fade
-    if memory_fragments >= 2:
-        show screen centered_narration("Alex's rage consumes everything... but this time, you remember more.")
-        $ renpy.pause()
-        hide screen centered_narration
-        show screen centered_narration("Fragments of memory pierce through the darkness..")
-        $ renpy.pause()
-        hide screen centered_narration
-        scene black
-        jump memory_breakthrough
-    else:
-        scene black
-        show screen death_msg("YOU DIED!")
-        $ renpy.pause()
-        hide screen death_msg
-        jump start
+    show screen centered_narration("Alex will turn himself in. Your spirit is free, and justice will be served.")
+    $ renpy.pause()
+    hide screen centered_narration
+    
+    return
 
 label memory_breakthrough:
     scene bg room_bloody with dissolve
@@ -469,25 +576,7 @@ label memory_breakthrough:
     $ discovered_truth = True
     jump start
 
-label confront_loops:
-    u "Enoughh! I know whats happening HERE"
-    u "This is loop number [loop_count]. I have died here [loop_count] times!!"
-    u "One of you is keeping me trapped!"
-
-    show friend angry at left
-    show stranger worried at right 
-
-    show friend worried at left
-    show stranger worried at right
-    
-    f "You're not making sense..."
-    s "He's finally remembering..."
-    
-    u "The body by the door - it's mine, isn't it?"
-    
-    "Both of them freeze."
-    jump choose_confrontation
-
+#  loop branch continuation
 label choose_confrontation:
     menu:
         "who do you cofront??"
@@ -523,23 +612,7 @@ label choose_fate:
         "Demand justice":
             jump justice_ending
 
-label justice_ending:
-    u "Alex, you have to face what you've done."
-    u "Keeping me here won't change the past."
-    
-    scene heaven at Transform(zoom=1.1) with dissolve
-    show friend worried at center
-    f "I... I know. I'm sorry. I'm so sorry."
-    pause(2.0)
-    "The room fades as Alex finally accepts his guilt."
-    scene black with fade
-    show screen centered_narration("Alex will turn himself in. Your spirit is free, and justice will be served.")
-    $ renpy.pause()
-    hide screen centered_narration
-    
-    return
-
-# ---------------------------Define a screen to show centered narration text ---------------------------------
+# Define a screen to show centered narration text 
 screen centered_narration(content):
 
     frame:
