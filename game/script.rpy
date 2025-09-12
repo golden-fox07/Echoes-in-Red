@@ -33,6 +33,13 @@ image stranger worried = "images/stranger/worried.png"
 
 # music and sfx
 define audio.heartbeat = "audio/heartbeat.mp3"
+define audio.sting = "audio/sting.mp3"
+define audio.laugh = "audio/laugh.mp3"
+define audio.scream = "audio/scream.mp3"
+define audio.bg_music-1 = "audio/bg_music-1.mp3"
+define audio.bg_music-2 = "audio/bg_music-2.mp3"
+define audio.bg_music-3 = "audiio/bg_music-3.mp3"
+define audio.bg_music-4 = "audio/bg_music-4.mp3"
 
 label start:
     show screen disclaimer
