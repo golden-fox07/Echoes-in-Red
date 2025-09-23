@@ -42,9 +42,11 @@ image stranger worried = "images/stranger/worried.png"
 # define audio.bg_music-4 = "audio/bg_music-4.mp3"
 
 label start:
-    show screen disclaimer
-    $ renpy.pause(hard=True)
-    hide screen disclaimer
+
+    if loop_count == 0:
+        show screen disclaimer
+        $ renpy.pause(hard=True)
+        hide screen disclaimer
 
     $ loop_count += 1
 # intro 
