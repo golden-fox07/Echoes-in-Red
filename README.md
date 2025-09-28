@@ -1,18 +1,20 @@
 # Echoes in Red
-<img width="1768" height="1042" alt="cpver-page" src="https://github.com/user-attachments/assets/99573dbd-cb58-4253-bbbb-a945a58888fd" />
 
 There’s nothing more unsettling than waking up in the same room, again and again, each time with blood on your hands and no memory of how it got there. Echoes in Red is a looping psychological thriller that forces you to question not just who you can trust, but whether you can even trust yourself.  
+
+<img width="1768" height="1042" alt="cpver-page" src="https://github.com/user-attachments/assets/99573dbd-cb58-4253-bbbb-a945a58888fd" />
 
 ---
 
 ## Disclaimer ⚠️
 When you launch the game, you will see a **disclaimer screen right at the start**.  
-<img width="1435" height="839" alt="image" src="https://github.com/user-attachments/assets/0dcd4a95-7681-429c-abb1-dad309fa4c28" />
 
 It warns you about:  
 - **Blood, psychological horror, and disturbing imagery**.  
 - **Unreliable narrators and gaslighting galore**.  
 - Basically: if you came for wholesome romance, you are **very lost**.  
+
+<img width="1435" height="839" alt="image" src="https://github.com/user-attachments/assets/0dcd4a95-7681-429c-abb1-dad309fa4c28" />
 
 ---
 
