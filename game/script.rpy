@@ -75,7 +75,7 @@ label start:
     scene bg room_clean at Transform(zoom=1.1)
 
     if loop_count == 1:
-        u "Huhh....there am i???"
+        u "Huhh....where am i???"
 
     elif loop_count <= 3:
         u "This room... I've been here before."
